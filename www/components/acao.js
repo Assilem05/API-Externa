@@ -1,21 +1,25 @@
-// This is a JavaScript file
 
-$(documents).on("click","#buscar",function(){
-    $.ajax({
-      type:"get", //como vou enviar
-      url:"http://viacep.com.br/ws/"+$("#regiao").val()+"/json/", //para onde enviar
-      success: function(data){ //executar se der certo
-        var conteudo;
-        conteudo = "<p><strong>Logradouro:</strong>"+data.logradouro+"</p>";
-        conteudo += "<p><strong>Bairro:</strong>"+data.bairro+"</p>";
-        conteudo += "<p><strong>Cidade:</strong>"+data.localidade+"</p>";
-        conteudo += "<p><strong>Estado:</strong>"+data.uf+"</p>";
+$(document).on("click","#buscar",function(){
+   $.ajax({
+      type:"get",
+      url:"http://apiadvisor.climatempo.com.br/api/v1/forecast/region/"+$("#regiao").val()+"?token=ede00d806e43a07e8496dfb0621c2da3",
 
-        $("#dados").html(conteudo);
-      },
+       sucess: function listar(record){
+        var Lista = "";
 
-      error: function(){ //executar se der erro
-        alert("deu erro!");
+  $.each(record.data, function(i,dados){
+
+        Lista += "<p><strong>Região: </strong>"+dados.region+"</p>";
+        Lista += "<p><strong>Data: </strong>"+dados.date_br+"</p>";
+        Lista += "<p>"+dados.image+"</p>";
+        Lista += "<p>"+dados.text+"</p>";
+     });
+
+      $("#listarDados").html(Lista);
+    },
+
+    error: function(data){
+        navigator.notification.alert("Erro ao fazer a busca do registro");
       }
     });
 });
